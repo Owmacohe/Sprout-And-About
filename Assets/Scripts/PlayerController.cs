@@ -1,4 +1,6 @@
-public class PlayerController
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
 {
     void OnMove()
     {

@@ -1,156 +1,201 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Random = UnityEngine.Random;
+
 public class Garden
 {
     class Plant
     {
         public float Growth { get; set; }
         public Vector2 Position { get; }
+        public GameObject Object { get; }
 
-        public Plant(Vector2 pos)
+        public Plant(Vector2 pos, GameObject obj)
         {
             Growth = 0;
             Position = pos;
+            Object = obj;
         }
     }
 
-    Plant[,] plants;
-    Vector2 size;
+    public Vector2 Size { get; }
+    public bool IsEmpty { get; private set; }
+    public bool IsFull { get; private set; }
 
-    int numPlanted;
-    bool isEmpty, isFull;
-    
-    public Garden(Vector2 size)
+    Plant[,] plants;
+    List<Plant> planted;
+
+    public Garden(int x, int y)
     {
-        this.size = size;
-        plants = new Plant[size.x, size.y];
-        isEmpty = true;
+        Size = new Vector2(x, y);
+        
+        plants = new Plant[x, y];
+        planted = new List<Plant>();
+        
+        IsEmpty = true;
     }
 
     Vector2 GetRandomPos(bool empty)
     {
-        if ((empty && isFull) || (!empty && isEmpty))
+        if ((empty && IsFull) || (!empty && IsEmpty))
         {
-            return null; // TODO
+            Debug.Log("<b>GARDEN:</b> unable to get position");
+            return Vector2.one * -1;
         }
         
-        Vector2 temp = new Vector2(Random.Range(0, size.x), Random.Range(0, size.y));
+        Vector2 temp = new Vector2(Random.Range(0, Size.x), Random.Range(0, Size.y));
 
-        while ((empty && plants[temp.x, temp.y] == null) ||
-               (!empty && plants[temp.x, temp.y] != null))
+        while ((empty && plants[(int)temp.x, (int)temp.y] != null) ||
+               (!empty && plants[(int)temp.x, (int)temp.y] == null))
         {
-            temp = new Vector2(Random.Range(0, size.x), Random.Range(0, size.y));
+            temp = new Vector2(Random.Range(0, Size.x), Random.Range(0, Size.y));
         }
 
         return temp;
     }
 
-    public void CreatePlant(Vector2 pos)
+    public Vector2 CreatePlant(GameObject obj, int x, int y)
     {
-        if (!isFull)
+        if (!IsFull)
         {
-            if (plants[pos.x, pos, y] == null)
+            if (plants[x, y] == null)
             {
-                if (numPlanted == 0)
+                if (planted.Count == 0)
                 {
-                    isEmpty = false;
+                    IsEmpty = false;
                 }
-                
-                plants[pos.x, pos.y] = new Plant(pos);
-                numPlanted++;
-                
-                // TODO: create in-game
 
-                if (numPlanted >= (size.x * size.y))
+                Vector2 temp = new Vector2(x, y);
+                Plant tempPlant = new Plant(temp, obj);
+                
+                plants[x, y] = tempPlant;
+                planted.Add(tempPlant);
+                
+                if (planted.Count >= (Size.x * Size.y))
                 {
-                    isFull = true;
+                    IsFull = true;
                 }
+
+                return temp;
             }
             else
             {
-                Debug.Log("<b>GARDEN:</b> " + pos + "full");
+                Debug.Log("<b>GARDEN:</b> [" + x + ", " + y + "] full");
             }
         }
         else
         {
             Debug.Log("<b>GARDEN:</b> full");
         }
+
+        return Vector2.one * -1;
     }
 
-    public void CreatePlant()
+    public Vector2 CreatePlant(GameObject obj)
     {
-        CreatePlant(GetRandomPos(false));
+        Vector2 temp = GetRandomPos(true);
+
+        return CreatePlant(obj, (int)temp.x, (int)temp.y);
     }
 
-    public void GrowPlant(Vector2 pos)
+    public Vector2 GrowPlant(int x, int y)
     {
-        if (!isEmpty)
+        if (!IsEmpty)
         {
-            Plant temp = plants[pos.x, pos.y];
+            Plant temp = plants[x, y];
 
             if (temp != null)
             {
                 if (temp.Growth < 1)
                 {
-                    temp.Growth += 0.1f;
+                    temp.Growth += Random.Range(0.05f, 0.2f); // TODO: may need to be tweaked
                     
-                    // TODO: grow in-game
-                }
-                else
-                {
-                    Debug.Log("<b>GARDEN:</b> " + temp.Position + " fully grown");
+                    if (temp.Growth >= 1)
+                    {
+                        Debug.Log("<b>GARDEN:</b> " + temp.Position + " fully grown");
+                    }
+                    
+                    return new Vector2(x, y);
                 }
             }
             else
             {
-                Debug.Log("<b>GARDEN:</b> " + pos + " empty");
+                Debug.Log("<b>GARDEN:</b> [" + x + ", " + y + "] empty");
             }  
         }
         else
         {
             Debug.Log("<b>GARDEN:</b> empty");
         }
+        
+        return Vector2.one * -1;
     }
 
-    public void GrowPlant()
+    public Vector2 GrowPlant()
     {
-        GrowPlant(GetRandomPos(true));
+        Vector2 temp = GetRandomPos(false);
+        
+        return GrowPlant((int)temp.x, (int)temp.y);
     }
 
-    public void DestroyPlant(Vector2 pos)
+    public List<Vector2> GrowAllPlants()
     {
-        if (!isEmpty)
+        List<Vector2> grown = new List<Vector2>();
+        
+        foreach (Plant i in planted)
         {
-            Plant temp = plants[pos.x, pos.y];
+            GrowPlant((int)i.Position.x, (int)i.Position.y);
+
+            if (i.Growth >= 1)
+            {
+                grown.Add(i.Position);
+            }
+        }
+
+        return grown;
+    }
+
+    public GameObject DestroyPlant(int x, int y)
+    {
+        if (!IsEmpty)
+        {
+            Plant temp = plants[x, y];
 
             if (temp != null)
             {
-                if (numPlanted >= (size.x * size.y))
+                if (planted.Count >= (Size.x * Size.y))
                 {
-                    isFull = false;
-                }
-                
-                temp = null;
-                numPlanted--;
-
-                if (numPlanted == 0)
-                {
-                    isEmpty = true;
+                    IsFull = false;
                 }
 
-                // TODO: destroy in-game
+                plants[x, y] = null;
+                planted.Remove(temp);
+
+                if (planted.Count == 0)
+                {
+                    IsEmpty = true;
+                }
+
+                return temp.Object;
             }
             else
             {
-                Debug.Log("<b>GARDEN:</b> " + pos + " empty");
+                Debug.Log("<b>GARDEN:</b> [" + x + ", " + y + "] empty");
             }
         }
         else
         {
             Debug.Log("<b>GARDEN:</b> empty");
         }
+        
+        return null;
     }
     
-    public void DestroyPlant()
+    public GameObject DestroyPlant()
     {
-        DestroyPlant(GetRandomPos(true));
+        Vector2 temp = GetRandomPos(false);
+        
+        return DestroyPlant((int)temp.x, (int)temp.y);
     }
 }
