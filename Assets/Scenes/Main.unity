@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -473,6 +473,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 05fcfa0c3fc54de4b8cf9973e4cd2354, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5dac79a2e5530f149bcbca90170eae52, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 05fcfa0c3fc54de4b8cf9973e4cd2354, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3ea9e94d4f084044d9c26133283cef4f, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 05fcfa0c3fc54de4b8cf9973e4cd2354, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: f6d82c5fd51889c499fc4ac9f6cc5342, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 05fcfa0c3fc54de4b8cf9973e4cd2354, type: 3}
+      propertyPath: m_Materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5c0187781105bfd4a9e7510d2ecf96de, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 05fcfa0c3fc54de4b8cf9973e4cd2354, type: 3}
+      propertyPath: m_Materials.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: 988cf68c4c8e2d1449c687d3cc264054, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 05fcfa0c3fc54de4b8cf9973e4cd2354, type: 3}
+      propertyPath: m_Materials.Array.data[5]
+      value: 
+      objectReference: {fileID: 2100000, guid: e8ac290eddbfe524a81a07ae7126d23f, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 05fcfa0c3fc54de4b8cf9973e4cd2354, type: 3}
+      propertyPath: m_Materials.Array.data[6]
+      value: 
+      objectReference: {fileID: 2100000, guid: f78b7f270cbd3464cb86dc92cdf654d4, type: 2}
     - target: {fileID: 919132149155446097, guid: 05fcfa0c3fc54de4b8cf9973e4cd2354, type: 3}
       propertyPath: m_Name
       value: Fence
