@@ -14,7 +14,7 @@ public class GardenController : MonoBehaviour
     [SerializeField]
     TMP_Text mulch;
     
-    Garden garden;
+    public Garden garden;
 
     void Start()
     {
@@ -29,14 +29,10 @@ public class GardenController : MonoBehaviour
         {
             CreatePlant();
         }
-        
+
         if (Time.time % 1 == 0)
         {
-            foreach (Vector2 i in garden.GrowAllPlants())
-            {
-                DestroyPlant(i);
-                mulch.text = (int.Parse(mulch.text) + 1).ToString();
-            }
+            garden.GrowAllPlants(true);
         }
     }
 
@@ -48,17 +44,23 @@ public class GardenController : MonoBehaviour
             
             Vector2 temp = garden.CreatePlant(tempPlant);
 
-            tempPlant.transform.localPosition = new Vector3(start.x + temp.x, 0, start.y - temp.y);   
+            tempPlant.transform.localPosition = new Vector3(start.x + temp.x, 0.1f, start.y - temp.y);   
+            tempPlant.transform.localRotation = Quaternion.Euler(Vector3.up * Random.Range(0, 360));
         }
     }
 
-    void DestroyPlant(Vector2 pos)
+    public void DestroyPlant(Vector2 pos, bool checkForFullGrowth)
     {
         if (!garden.IsEmpty)
         {
-            GameObject temp = garden.DestroyPlant((int)pos.x, (int)pos.y);
-        
-            Destroy(temp);   
+            GameObject temp = garden.DestroyPlant((int)pos.x, (int)pos.y, checkForFullGrowth);
+
+            if (temp != null)
+            {
+                Destroy(temp);
+            
+                mulch.text = (int.Parse(mulch.text) + 1).ToString();   
+            }
         }
     }
 
