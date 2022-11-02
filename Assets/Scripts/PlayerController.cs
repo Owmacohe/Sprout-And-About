@@ -37,9 +37,9 @@ public class PlayerController : MonoBehaviour
         {
             GameObject temp = hit.transform.gameObject;
 
-            if (temp.CompareTag("Plant"))
+            if (temp.CompareTag("Plot"))
             {
-                gc.DestroyPlant(gc.garden.GetPosFromObject(temp), true);
+                gc.ActivatePlot(gc.garden.GetPosFromPlot(temp));
             }
         }
     }
