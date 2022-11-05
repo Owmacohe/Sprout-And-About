@@ -413,7 +413,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -437,7 +437,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.35355338, y: -0.35355338, z: 0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: 4, y: 5.66, z: -4}
+  m_LocalPosition: {x: 4, y: 6.2, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -491,9 +491,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   verbose: 1
   start: {x: -2.5, y: 2.5}
+  growthSpeed: 0.01
   plotObject: {fileID: 5815843610456945440, guid: 385cd7af8e1dee845bb58347d58100e2, type: 3}
   plants:
   - {fileID: 1470255733939742436, guid: 794159996f93c4740847ca9736a41588, type: 3}
+  - {fileID: 1470255733939742436, guid: f2ccb304612285c4689196a405bec16f, type: 3}
+  - {fileID: 1470255733939742436, guid: 109655af433a62b4b94203f3f48f0e60, type: 3}
+  - {fileID: 1470255733939742436, guid: aded51a24cb5ff54c9f4c6cf0a23b30a, type: 3}
   mulch: {fileID: 1956125408}
 --- !u!1001 &1139820785
 PrefabInstance:
