@@ -13,21 +13,6 @@ public class PlayerController : MonoBehaviour
         gc = FindObjectOfType<GardenController>();
     }
 
-    void OnMove()
-    {
-        // character movement
-    }
-
-    void OnClick()
-    {
-        // selection
-    }
-
-    void OnHold()
-    {
-        // dragging plants
-    }
-
     void OnFire()
     {
         RaycastHit hit;
@@ -39,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
             if (temp.CompareTag("Plot"))
             {
-                gc.ActivatePlot(gc.garden.GetPosFromPlot(temp));
+                gc.ActivatePlot(gc.garden.GetPlantFromPlot(temp).Position);
             }
         }
     }
