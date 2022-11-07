@@ -129,7 +129,10 @@ public class Garden
 
     float GetIndividualDiversityScore(int count)
     {
-        return (1f / planted) * -Mathf.Pow(count - (planted / 4f), 2) + 0.25f;
+        //float temp = (1f / planted) * -Mathf.Pow(count - (planted / 4f), 2) + 0.25f;
+        float temp = -Mathf.Pow(50f, -count) + 0.25f;
+
+        return temp > 0 ? temp : 0;
     }
 
     public float GetDiversity()

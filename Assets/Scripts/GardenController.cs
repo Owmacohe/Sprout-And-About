@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class GardenController : MonoBehaviour
     [SerializeField]
     GameObject plotObject;
     [SerializeField]
-    TMP_Text mulch;
+    GameObject mulch, mulchBag;
 
     [SerializeField]
     GameObject aloePrefab, birdOfParadisePrefab, tulipsPrefab, snakePlantPrefab;
@@ -26,6 +27,7 @@ public class GardenController : MonoBehaviour
     
     public Garden garden;
     int gardenStage;
+    int lastMulch;
     
     Garden.PlantTypes plantType = Garden.PlantTypes.Aloe;
 
@@ -126,6 +128,10 @@ public class GardenController : MonoBehaviour
             tempPlant.transform.localRotation = Quaternion.Euler(Vector3.up * Random.Range(0, 360));
             tempPlant.transform.localScale = Vector3.one * 1.2f;   
         }
+        else
+        {
+            Debug.Log("<b>GARDEN CONTROLLER:</b> [" + x + ", " + y + "] not enough mulch");
+        }
     }
 
     public void ActivatePlot(Vector2 pos)
@@ -134,7 +140,7 @@ public class GardenController : MonoBehaviour
         {
             CreatePlant((int)pos.x, (int)pos.y, false, false);
             
-            UpdateMulch();
+            StartCoroutine(UpdateMulch());
         }
         else
         {
@@ -150,7 +156,7 @@ public class GardenController : MonoBehaviour
                 Destroy(temp);
                 garden.GetPlantFromPos((int) pos.x, (int) pos.y).Reset();
             
-                UpdateMulch();
+                StartCoroutine(UpdateMulch());
 
                 if ((gardenStage == 0 && garden.Mulch >= 15) ||
                     (gardenStage == 1 && garden.Mulch >= 30) ||
@@ -162,9 +168,27 @@ public class GardenController : MonoBehaviour
         }
     }
 
-    void UpdateMulch()
+    IEnumerator UpdateMulch()
     {
-        mulch.text = garden.Mulch.ToString();
+        if (garden.Mulch >= lastMulch)
+        {
+            for (int i = 0; i < garden.Mulch - lastMulch; i++)
+            {
+                Instantiate(mulchBag, mulch.transform);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < lastMulch - garden.Mulch; i++)
+            {
+                Destroy(mulch.transform.GetChild(0).gameObject);
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+
+        lastMulch = garden.Mulch;
+        
+        print(garden.GetDiversity());
     }
 
     public void SetPlantType(string type)
@@ -227,11 +251,13 @@ public class GardenController : MonoBehaviour
             a++;
         }
         
-        UpdateMulch();
+        StartCoroutine(UpdateMulch());
         
+        /*
         birdOfParadiseUI.SetActive(false);
         tulipsUI.SetActive(false);
         snakePlantUI.SetActive(false);
+        */
 
         if (startFull)
         {
