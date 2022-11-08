@@ -489,11 +489,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61f9975f2882417b9384de6fdab69586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  verbose: 0
   start: {x: -2.5, y: 2.5}
+  growthSpeed: 0.1
   plotObject: {fileID: 5815843610456945440, guid: 385cd7af8e1dee845bb58347d58100e2, type: 3}
-  plants:
-  - {fileID: 1470255733939742436, guid: 794159996f93c4740847ca9736a41588, type: 3}
   mulch: {fileID: 1956125408}
+  aloePrefab: {fileID: 0}
+  birdOfParadisePrefab: {fileID: 0}
+  tulipsPrefab: {fileID: 0}
+  snakePlantPrefab: {fileID: 0}
+  aloeStates: []
+  birdOfParadiseStates: []
+  tulipsStates: []
+  snakePlantStates: []
+  aloeUI: {fileID: 0}
+  birdOfParadiseUI: {fileID: 0}
+  tulipsUI: {fileID: 0}
+  snakePlantUI: {fileID: 0}
 --- !u!1001 &1139820785
 PrefabInstance:
   m_ObjectHideFlags: 0
