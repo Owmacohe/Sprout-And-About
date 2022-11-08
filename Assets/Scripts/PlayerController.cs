@@ -15,17 +15,20 @@ public class PlayerController : MonoBehaviour
 
     void OnFire()
     {
-        RaycastHit hit;
-        Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        
-        if (Physics.Raycast(ray, out hit))
+        if (!gc.paused)
         {
-            GameObject temp = hit.transform.gameObject;
-
-            if (temp.CompareTag("Plot"))
+            RaycastHit hit;
+            Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+        
+            if (Physics.Raycast(ray, out hit))
             {
-                gc.ActivatePlot(gc.garden.GetPlantFromPlot(temp).Position);
-            }
+                GameObject temp = hit.transform.gameObject;
+
+                if (temp.CompareTag("Plot"))
+                {
+                    gc.ActivatePlot(gc.garden.GetPlantFromPlot(temp).Position);
+                }
+            }   
         }
     }
 }

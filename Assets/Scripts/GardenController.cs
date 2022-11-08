@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 
 public class GardenController : MonoBehaviour
 {
+    public bool paused;
+    
     [SerializeField]
     bool verbose;
     [SerializeField]
@@ -24,12 +26,16 @@ public class GardenController : MonoBehaviour
     Mesh[] aloeStates, birdOfParadiseStates, tulipsStates, snakePlantStates;
     [SerializeField]
     GameObject aloeUI, birdOfParadiseUI, tulipsUI, snakePlantUI;
+
+    [SerializeField]
+    RectTransform aloeBar, birdOfParadiseBar, tulipsBar, snakePlantBar;
+    [SerializeField]
+    GameObject aloeMarker, birdOfParadiseMarker, tulipsMarker, snakePlantMarker;
     
     public Garden garden;
-    int gardenStage;
     int lastMulch;
     
-    Garden.PlantTypes plantType = Garden.PlantTypes.Aloe;
+    Garden.PlantTypes plantType = Garden.PlantTypes.None;
 
     void Start()
     {
@@ -40,52 +46,55 @@ public class GardenController : MonoBehaviour
 
     void FixedUpdate()
     {
-        List<GameObject>[] temp = garden.GrowAllPlants(growthSpeed);
-
-        foreach (GameObject dying in temp[0])
+        if (!paused)
         {
-            Mesh newState = null;
-            
-            switch (garden.GetPlantFromObject(dying).Type)
-            {
-                case Garden.PlantTypes.Aloe:
-                    newState = aloeStates[1];
-                    break;
-                case Garden.PlantTypes.BirdOfParadise:
-                    newState = birdOfParadiseStates[1];
-                    break;
-                case Garden.PlantTypes.Tulips:
-                    newState = tulipsStates[1];
-                    break;
-                case Garden.PlantTypes.SnakePlant:
-                    newState = snakePlantStates[1];
-                    break;
-            }
+            List<GameObject>[] temp = garden.GrowAllPlants(growthSpeed);
 
-            dying.GetComponentInChildren<MeshFilter>().mesh = newState;
-        }
+            foreach (GameObject dying in temp[0])
+            {
+                Mesh newState = null;
+            
+                switch (garden.GetPlantFromObject(dying).Type)
+                {
+                    case Garden.PlantTypes.Aloe:
+                        newState = aloeStates[1];
+                        break;
+                    case Garden.PlantTypes.BirdOfParadise:
+                        newState = birdOfParadiseStates[1];
+                        break;
+                    case Garden.PlantTypes.Tulips:
+                        newState = tulipsStates[1];
+                        break;
+                    case Garden.PlantTypes.SnakePlant:
+                        newState = snakePlantStates[1];
+                        break;
+                }
+
+                dying.GetComponentInChildren<MeshFilter>().mesh = newState;
+            }
         
-        foreach (GameObject dead in temp[1])
-        {
-            Mesh newState = null;
-            
-            switch (garden.GetPlantFromObject(dead).Type)
+            foreach (GameObject dead in temp[1])
             {
-                case Garden.PlantTypes.Aloe:
-                    newState = aloeStates[2];
-                    break;
-                case Garden.PlantTypes.BirdOfParadise:
-                    newState = birdOfParadiseStates[2];
-                    break;
-                case Garden.PlantTypes.Tulips:
-                    newState = tulipsStates[2];
-                    break;
-                case Garden.PlantTypes.SnakePlant:
-                    newState = snakePlantStates[2];
-                    break;
-            }
+                Mesh newState = null;
+            
+                switch (garden.GetPlantFromObject(dead).Type)
+                {
+                    case Garden.PlantTypes.Aloe:
+                        newState = aloeStates[2];
+                        break;
+                    case Garden.PlantTypes.BirdOfParadise:
+                        newState = birdOfParadiseStates[2];
+                        break;
+                    case Garden.PlantTypes.Tulips:
+                        newState = tulipsStates[2];
+                        break;
+                    case Garden.PlantTypes.SnakePlant:
+                        newState = snakePlantStates[2];
+                        break;
+                }
 
-            dead.GetComponentInChildren<MeshFilter>().mesh = newState;
+                dead.GetComponentInChildren<MeshFilter>().mesh = newState;
+            }   
         }
     }
 
@@ -140,7 +149,7 @@ public class GardenController : MonoBehaviour
         {
             CreatePlant((int)pos.x, (int)pos.y, false, false);
             
-            StartCoroutine(UpdateMulch());
+            StartCoroutine(UpdateUI());
         }
         else
         {
@@ -156,19 +165,17 @@ public class GardenController : MonoBehaviour
                 Destroy(temp);
                 garden.GetPlantFromPos((int) pos.x, (int) pos.y).Reset();
             
-                StartCoroutine(UpdateMulch());
-
-                if ((gardenStage == 0 && garden.Mulch >= 15) ||
-                    (gardenStage == 1 && garden.Mulch >= 30) ||
-                    (gardenStage == 2 && garden.Mulch >= 60))
-                {
-                    IncreaseStage();
-                }
+                StartCoroutine(UpdateUI());
             }
+        }
+        
+        if (garden.CanProgress())
+        {
+            IncreaseStage();
         }
     }
 
-    IEnumerator UpdateMulch()
+    IEnumerator UpdateUI()
     {
         if (garden.Mulch >= lastMulch)
         {
@@ -187,8 +194,34 @@ public class GardenController : MonoBehaviour
         }
 
         lastMulch = garden.Mulch;
-        
-        print(garden.GetDiversity());
+
+        aloeBar.sizeDelta = new Vector2(0, 0);
+        birdOfParadiseBar.sizeDelta = new Vector2(0, 0);
+        tulipsBar.sizeDelta = new Vector2(0, 0);
+        snakePlantBar.sizeDelta = new Vector2(0, 0);
+
+        float[] temp = garden.GetScores();
+
+        aloeBar.sizeDelta = new Vector2(temp[0] * 100f, 20f);
+        aloeBar.anchoredPosition = new Vector2((0.5f * temp[0] * 100f) - 200, 0);
+
+        if (garden.Stage > 0)
+        {
+            birdOfParadiseBar.sizeDelta = new Vector2(temp[1] * 100f, 20f);
+            birdOfParadiseBar.anchoredPosition = new Vector2((0.5f * temp[1] * 100f) - 100, 0);
+            
+            if (garden.Stage > 1)
+            {
+                tulipsBar.sizeDelta = new Vector2(temp[2] * 100f, 20f);
+                tulipsBar.anchoredPosition = new Vector2((0.5f * temp[2] * 100f), 0);
+                
+                if (garden.Stage > 2)
+                {
+                    snakePlantBar.sizeDelta = new Vector2(temp[2] * 100f, 20f);
+                    snakePlantBar.anchoredPosition = new Vector2((0.5f * temp[2] * 100f) + 100, 0);
+                }
+            }
+        }
     }
 
     public void SetPlantType(string type)
@@ -212,18 +245,21 @@ public class GardenController : MonoBehaviour
 
     void IncreaseStage()
     {
-        gardenStage++;
+        garden.Stage++;
         
-        switch (gardenStage)
+        switch (garden.Stage)
         {
             case 1:
                 birdOfParadiseUI.SetActive(true);
+                birdOfParadiseMarker.SetActive(true);
                 break;
             case 2:
                 tulipsUI.SetActive(true);
+                tulipsMarker.SetActive(true);
                 break;
             case 3:
                 snakePlantUI.SetActive(true);
+                snakePlantMarker.SetActive(true);
                 break;
         }
     }
@@ -251,20 +287,24 @@ public class GardenController : MonoBehaviour
             a++;
         }
         
-        StartCoroutine(UpdateMulch());
+        StartCoroutine(UpdateUI());
         
-        /*
         birdOfParadiseUI.SetActive(false);
         tulipsUI.SetActive(false);
         snakePlantUI.SetActive(false);
-        */
+        
+        birdOfParadiseMarker.SetActive(false);
+        tulipsMarker.SetActive(false);
+        snakePlantMarker.SetActive(false);
 
         if (startFull)
         {
             for (int k = 0; k < garden.SizeX * garden.SizeY; k++)
             {
                 CreatePlant(0, 0, true, true);
-            }   
+            }
         }
+        
+        plantType = Garden.PlantTypes.Aloe;
     }
 }

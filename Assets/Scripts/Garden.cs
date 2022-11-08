@@ -6,6 +6,14 @@ using Random = UnityEngine.Random;
 public class Garden
 {
     public enum PlantTypes { None = 0, Aloe = 1, BirdOfParadise = 2, Tulips = 3, SnakePlant = 4 }
+
+    public readonly int[,] StageCounts =
+    {
+        {15, 0, 0, 0},
+        {15, 15, 0, 0},
+        {10, 10, 10, 0},
+        {15, 15, 15, 15}
+    };
     
     public class Plant
     {
@@ -37,6 +45,7 @@ public class Garden
     public int SizeX { get; }
     public int SizeY { get; }
     public int Mulch { get; private set; }
+    public int Stage { get; set; }
 
     Plant[,] plants;
     int planted;
@@ -127,15 +136,14 @@ public class Garden
         return null;
     }
 
-    float GetIndividualDiversityScore(int count)
+    float GetIndividualScore(int count, int index)
     {
-        //float temp = (1f / planted) * -Mathf.Pow(count - (planted / 4f), 2) + 0.25f;
-        float temp = -Mathf.Pow(50f, -count) + 0.25f;
+        float temp = count / ((Stage > (index - 1)) ? (float)StageCounts[Stage, index] : count);
 
-        return temp > 0 ? temp : 0;
+        return temp > 1 ? 1 : temp;
     }
 
-    public float GetDiversity()
+    public float[] GetScores()
     {
         int aloeCount = 0;
         int birdOfParadiseCount = 0;
@@ -161,10 +169,23 @@ public class Garden
             }
         }
 
-        return GetIndividualDiversityScore(aloeCount) +
-               GetIndividualDiversityScore(birdOfParadiseCount) +
-               GetIndividualDiversityScore(tulipsCount) +
-               GetIndividualDiversityScore(snakePlantCount);
+        float[] temp = {
+            GetIndividualScore(aloeCount, 0),
+            GetIndividualScore(birdOfParadiseCount, 1),
+            GetIndividualScore(tulipsCount, 2),
+            GetIndividualScore(snakePlantCount, 3)
+        };
+
+        return temp;
+    }
+
+    public bool CanProgress()
+    {
+        float[] temp = GetScores();
+
+        return (Stage == 0 && temp[0] >= 1) ||
+               (Stage == 1 && temp[0] >= 1 && temp[1] >= 1) ||
+               (Stage == 2 && temp[0] >= 1 && temp[1] >= 1 && temp[2] >= 1);
     }
 
     public Vector2 CreatePlant(PlantTypes type, GameObject obj, int x, int y, bool isInit = true)
