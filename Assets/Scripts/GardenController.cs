@@ -21,16 +21,16 @@ public class GardenController : MonoBehaviour
     GameObject mulch, mulchBag;
 
     [SerializeField]
-    GameObject aloePrefab, birdOfParadisePrefab, tulipsPrefab, snakePlantPrefab;
+    GameObject tulipsPrefab, aloePrefab, snakePlantPrefab, birdOfParadisePrefab;
     [SerializeField]
-    Mesh[] aloeStates, birdOfParadiseStates, tulipsStates, snakePlantStates;
+    Mesh[] tulipsStates, aloeStates, snakePlantStates, birdOfParadiseStates;
     [SerializeField]
-    GameObject aloeUI, birdOfParadiseUI, tulipsUI, snakePlantUI;
+    GameObject tulipsUI, aloeUI, snakePlantUI, birdOfParadiseUI;
 
     [SerializeField]
-    RectTransform aloeBar, birdOfParadiseBar, tulipsBar, snakePlantBar;
+    RectTransform tulipsBar, aloeBar, snakePlantBar, birdOfParadiseBar;
     [SerializeField]
-    GameObject aloeMarker, birdOfParadiseMarker, tulipsMarker, snakePlantMarker;
+    GameObject tulipsMarker, aloeMarker, snakePlantMarker, birdOfParadiseMarker;
     
     public Garden garden;
     int lastMulch;
@@ -56,17 +56,17 @@ public class GardenController : MonoBehaviour
             
                 switch (garden.GetPlantFromObject(dying).Type)
                 {
-                    case Garden.PlantTypes.Aloe:
-                        newState = aloeStates[1];
-                        break;
-                    case Garden.PlantTypes.BirdOfParadise:
-                        newState = birdOfParadiseStates[1];
-                        break;
                     case Garden.PlantTypes.Tulips:
                         newState = tulipsStates[1];
                         break;
+                    case Garden.PlantTypes.Aloe:
+                        newState = aloeStates[1];
+                        break;
                     case Garden.PlantTypes.SnakePlant:
                         newState = snakePlantStates[1];
+                        break;
+                    case Garden.PlantTypes.BirdOfParadise:
+                        newState = birdOfParadiseStates[1];
                         break;
                 }
 
@@ -79,17 +79,17 @@ public class GardenController : MonoBehaviour
             
                 switch (garden.GetPlantFromObject(dead).Type)
                 {
-                    case Garden.PlantTypes.Aloe:
-                        newState = aloeStates[2];
-                        break;
-                    case Garden.PlantTypes.BirdOfParadise:
-                        newState = birdOfParadiseStates[2];
-                        break;
                     case Garden.PlantTypes.Tulips:
                         newState = tulipsStates[2];
                         break;
+                    case Garden.PlantTypes.Aloe:
+                        newState = aloeStates[2];
+                        break;
                     case Garden.PlantTypes.SnakePlant:
                         newState = snakePlantStates[2];
+                        break;
+                    case Garden.PlantTypes.BirdOfParadise:
+                        newState = birdOfParadiseStates[2];
                         break;
                 }
 
@@ -106,17 +106,17 @@ public class GardenController : MonoBehaviour
 
             switch (plantType)
             {
-                case Garden.PlantTypes.Aloe:
-                    tempObject = aloePrefab;
-                    break;
-                case Garden.PlantTypes.BirdOfParadise:
-                    tempObject = birdOfParadisePrefab;
-                    break;
                 case Garden.PlantTypes.Tulips:
                     tempObject = tulipsPrefab;
                     break;
+                case Garden.PlantTypes.Aloe:
+                    tempObject = aloePrefab;
+                    break;
                 case Garden.PlantTypes.SnakePlant:
                     tempObject = snakePlantPrefab;
+                    break;
+                case Garden.PlantTypes.BirdOfParadise:
+                    tempObject = birdOfParadisePrefab;
                     break;
             }
         
@@ -195,30 +195,30 @@ public class GardenController : MonoBehaviour
 
         lastMulch = garden.Mulch;
 
-        aloeBar.sizeDelta = new Vector2(0, 0);
-        birdOfParadiseBar.sizeDelta = new Vector2(0, 0);
         tulipsBar.sizeDelta = new Vector2(0, 0);
+        aloeBar.sizeDelta = new Vector2(0, 0);
         snakePlantBar.sizeDelta = new Vector2(0, 0);
+        birdOfParadiseBar.sizeDelta = new Vector2(0, 0);
 
         float[] temp = garden.GetScores();
 
-        aloeBar.sizeDelta = new Vector2(temp[0] * 100f, 20f);
-        aloeBar.anchoredPosition = new Vector2((0.5f * temp[0] * 100f) - 200, 0);
+        tulipsBar.sizeDelta = new Vector2(temp[0] * 100f, 20f);
+        tulipsBar.anchoredPosition = new Vector2((0.5f * temp[0] * 100f) - 200, 0);
 
         if (garden.Stage > 0)
         {
-            birdOfParadiseBar.sizeDelta = new Vector2(temp[1] * 100f, 20f);
-            birdOfParadiseBar.anchoredPosition = new Vector2((0.5f * temp[1] * 100f) - 100, 0);
+            aloeBar.sizeDelta = new Vector2(temp[1] * 100f, 20f);
+            aloeBar.anchoredPosition = new Vector2((0.5f * temp[1] * 100f) - 100, 0);
             
             if (garden.Stage > 1)
             {
-                tulipsBar.sizeDelta = new Vector2(temp[2] * 100f, 20f);
-                tulipsBar.anchoredPosition = new Vector2((0.5f * temp[2] * 100f), 0);
+                snakePlantBar.sizeDelta = new Vector2(temp[2] * 100f, 20f);
+                snakePlantBar.anchoredPosition = new Vector2((0.5f * temp[2] * 100f), 0);
                 
                 if (garden.Stage > 2)
                 {
-                    snakePlantBar.sizeDelta = new Vector2(temp[2] * 100f, 20f);
-                    snakePlantBar.anchoredPosition = new Vector2((0.5f * temp[2] * 100f) + 100, 0);
+                    birdOfParadiseBar.sizeDelta = new Vector2(temp[3] * 100f, 20f);
+                    birdOfParadiseBar.anchoredPosition = new Vector2((0.5f * temp[3] * 100f) + 100, 0);
                 }
             }
         }
@@ -228,17 +228,17 @@ public class GardenController : MonoBehaviour
     {
         switch (type)
         {
-            case "Aloe":
-                plantType = Garden.PlantTypes.Aloe;
-                break;
-            case "BirdOfParadise":
-                plantType = Garden.PlantTypes.BirdOfParadise;
-                break;
             case "Tulips":
                 plantType = Garden.PlantTypes.Tulips;
                 break;
+            case "Aloe":
+                plantType = Garden.PlantTypes.Aloe;
+                break;
             case "SnakePlant":
                 plantType = Garden.PlantTypes.SnakePlant;
+                break;
+            case "BirdOfParadise":
+                plantType = Garden.PlantTypes.BirdOfParadise;
                 break;
         }
     }
@@ -250,16 +250,16 @@ public class GardenController : MonoBehaviour
         switch (garden.Stage)
         {
             case 1:
-                birdOfParadiseUI.SetActive(true);
-                birdOfParadiseMarker.SetActive(true);
+                aloeUI.SetActive(true);
+                aloeMarker.SetActive(true);
                 break;
             case 2:
-                tulipsUI.SetActive(true);
-                tulipsMarker.SetActive(true);
-                break;
-            case 3:
                 snakePlantUI.SetActive(true);
                 snakePlantMarker.SetActive(true);
+                break;
+            case 3:
+                birdOfParadiseUI.SetActive(true);
+                birdOfParadiseMarker.SetActive(true);
                 break;
         }
     }
@@ -289,13 +289,13 @@ public class GardenController : MonoBehaviour
         
         StartCoroutine(UpdateUI());
         
-        birdOfParadiseUI.SetActive(false);
-        tulipsUI.SetActive(false);
+        aloeUI.SetActive(false);
         snakePlantUI.SetActive(false);
+        birdOfParadiseUI.SetActive(false);
         
-        birdOfParadiseMarker.SetActive(false);
-        tulipsMarker.SetActive(false);
+        aloeMarker.SetActive(false);
         snakePlantMarker.SetActive(false);
+        birdOfParadiseMarker.SetActive(false);
 
         if (startFull)
         {
@@ -305,6 +305,6 @@ public class GardenController : MonoBehaviour
             }
         }
         
-        plantType = Garden.PlantTypes.Aloe;
+        plantType = Garden.PlantTypes.Tulips;
     }
 }

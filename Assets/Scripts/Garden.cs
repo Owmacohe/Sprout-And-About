@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 
 public class Garden
 {
-    public enum PlantTypes { None = 0, Aloe = 1, BirdOfParadise = 2, Tulips = 3, SnakePlant = 4 }
+    public enum PlantTypes { None = 0, Tulips = 1, Aloe = 2, SnakePlant = 3, BirdOfParadise = 4 }
 
     public readonly int[,] StageCounts =
     {
@@ -145,35 +145,35 @@ public class Garden
 
     public float[] GetScores()
     {
-        int aloeCount = 0;
-        int birdOfParadiseCount = 0;
         int tulipsCount = 0;
+        int aloeCount = 0;
         int snakePlantCount = 0;
+        int birdOfParadiseCount = 0;
 
         foreach (Plant i in plants)
         {
             switch (i.Type)
             {
-                case PlantTypes.Aloe:
-                    aloeCount++;
-                    break;
-                case PlantTypes.BirdOfParadise:
-                    birdOfParadiseCount++;
-                    break;
                 case PlantTypes.Tulips:
                     tulipsCount++;
                     break;
+                case PlantTypes.Aloe:
+                    aloeCount++;
+                    break;
                 case PlantTypes.SnakePlant:
                     snakePlantCount++;
+                    break;
+                case PlantTypes.BirdOfParadise:
+                    birdOfParadiseCount++;
                     break;
             }
         }
 
         float[] temp = {
-            GetIndividualScore(aloeCount, 0),
-            GetIndividualScore(birdOfParadiseCount, 1),
-            GetIndividualScore(tulipsCount, 2),
-            GetIndividualScore(snakePlantCount, 3)
+            GetIndividualScore(tulipsCount, 0),
+            GetIndividualScore(aloeCount, 1),
+            GetIndividualScore(snakePlantCount, 2),
+            GetIndividualScore(birdOfParadiseCount, 3)
         };
 
         return temp;

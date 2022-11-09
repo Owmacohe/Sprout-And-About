@@ -154,11 +154,11 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 944745399}
-  m_RootOrder: 6
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 80, y: -40}
+  m_AnchoredPosition: {x: -120, y: -40}
   m_SizeDelta: {x: 66, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &104834522
@@ -230,11 +230,11 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 944745399}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -120, y: -40}
+  m_AnchoredPosition: {x: -20, y: -40}
   m_SizeDelta: {x: 66, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &256172413
@@ -543,14 +543,14 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1060291684}
-  - {fileID: 1212415708}
-  - {fileID: 256172412}
-  - {fileID: 1085299410}
-  - {fileID: 1201013560}
   - {fileID: 1598616623}
   - {fileID: 104834521}
+  - {fileID: 1212415708}
+  - {fileID: 256172412}
   - {fileID: 1747611139}
   - {fileID: 1167767383}
+  - {fileID: 1085299410}
+  - {fileID: 1201013560}
   m_Father: {fileID: 1947957210}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
@@ -733,38 +733,38 @@ MonoBehaviour:
   plotObject: {fileID: 5815843610456945440, guid: 385cd7af8e1dee845bb58347d58100e2, type: 3}
   mulch: {fileID: 1956125406}
   mulchBag: {fileID: 5939511750814140230, guid: 93bc43e668810c245896f25ed59b9cc7, type: 3}
-  aloePrefab: {fileID: 1470255733939742436, guid: 794159996f93c4740847ca9736a41588, type: 3}
-  birdOfParadisePrefab: {fileID: 1470255733939742436, guid: f2ccb304612285c4689196a405bec16f, type: 3}
   tulipsPrefab: {fileID: 1470255733939742436, guid: 109655af433a62b4b94203f3f48f0e60, type: 3}
+  aloePrefab: {fileID: 1470255733939742436, guid: 794159996f93c4740847ca9736a41588, type: 3}
   snakePlantPrefab: {fileID: 1470255733939742436, guid: aded51a24cb5ff54c9f4c6cf0a23b30a, type: 3}
-  aloeStates:
-  - {fileID: 294813240538335648, guid: 40719d8c0ebdf954283623a82ecadd33, type: 3}
-  - {fileID: 294813240538335648, guid: b6750a7552e774848a2955e1e01a5cf1, type: 3}
-  - {fileID: 294813240538335648, guid: b54f14e842b5a164fb40309099c456ef, type: 3}
-  birdOfParadiseStates:
-  - {fileID: 4234253964424508848, guid: 7ea0b45ecf874bf46b37e59fb73a2205, type: 3}
-  - {fileID: 4234253964424508848, guid: a4a1ac4604ba00b4da97086fb58ccc39, type: 3}
-  - {fileID: 4234253964424508848, guid: e3593f315ed6ae44d972d69a5151f5a6, type: 3}
+  birdOfParadisePrefab: {fileID: 1470255733939742436, guid: f2ccb304612285c4689196a405bec16f, type: 3}
   tulipsStates:
   - {fileID: 7202459303312977787, guid: 4efffc9aab4adb14bb9e5c9edb4228f6, type: 3}
   - {fileID: -2488467714982265712, guid: aaabf2abb545c4246ba7205708db995a, type: 3}
   - {fileID: 2133295014487327420, guid: 9c5be47e9db5233418b666387cbaf709, type: 3}
+  aloeStates:
+  - {fileID: 294813240538335648, guid: 40719d8c0ebdf954283623a82ecadd33, type: 3}
+  - {fileID: 294813240538335648, guid: b6750a7552e774848a2955e1e01a5cf1, type: 3}
+  - {fileID: 294813240538335648, guid: b54f14e842b5a164fb40309099c456ef, type: 3}
   snakePlantStates:
   - {fileID: 8388112596307739274, guid: 0c15666ab0b2db344a56db9c1b210228, type: 3}
   - {fileID: 8388112596307739274, guid: 45091206791c7ec4fb548655c5418bf1, type: 3}
   - {fileID: 8388112596307739274, guid: 504a3b9a350de29468b94c9d9f3540fb, type: 3}
-  aloeUI: {fileID: 7723752106614137910}
-  birdOfParadiseUI: {fileID: 4393109520220589933}
+  birdOfParadiseStates:
+  - {fileID: 4234253964424508848, guid: 7ea0b45ecf874bf46b37e59fb73a2205, type: 3}
+  - {fileID: 4234253964424508848, guid: a4a1ac4604ba00b4da97086fb58ccc39, type: 3}
+  - {fileID: 4234253964424508848, guid: e3593f315ed6ae44d972d69a5151f5a6, type: 3}
   tulipsUI: {fileID: 2808884790482794398}
+  aloeUI: {fileID: 7723752106614137910}
   snakePlantUI: {fileID: 874484803662122150}
-  aloeBar: {fileID: 1212415708}
-  birdOfParadiseBar: {fileID: 1085299410}
+  birdOfParadiseUI: {fileID: 4393109520220589933}
   tulipsBar: {fileID: 1598616623}
+  aloeBar: {fileID: 1212415708}
   snakePlantBar: {fileID: 1747611139}
-  aloeMarker: {fileID: 256172411}
-  birdOfParadiseMarker: {fileID: 1201013559}
+  birdOfParadiseBar: {fileID: 1085299410}
   tulipsMarker: {fileID: 104834520}
+  aloeMarker: {fileID: 256172411}
   snakePlantMarker: {fileID: 1167767382}
+  birdOfParadiseMarker: {fileID: 1201013559}
 --- !u!1 &1060291683
 GameObject:
   m_ObjectHideFlags: 0
@@ -872,11 +872,11 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 944745399}
-  m_RootOrder: 3
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -50, y: 0}
+  m_AnchoredPosition: {x: 150, y: 0}
   m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1085299411
@@ -892,7 +892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.22352943, g: 0.70980394, b: 0.2901961, a: 1}
+  m_Color: {r: 0.015686275, g: 0.40784317, b: 0.22352943, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1038,11 +1038,11 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 944745399}
-  m_RootOrder: 8
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 180, y: -40}
+  m_AnchoredPosition: {x: 80, y: -40}
   m_SizeDelta: {x: 66, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1167767384
@@ -1114,11 +1114,11 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 944745399}
-  m_RootOrder: 4
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -20, y: -40}
+  m_AnchoredPosition: {x: 180, y: -40}
   m_SizeDelta: {x: 66, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1201013561
@@ -1190,11 +1190,11 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 944745399}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -150, y: 0}
+  m_AnchoredPosition: {x: -50, y: 0}
   m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1212415709
@@ -1210,7 +1210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.54901963, g: 0.77647066, b: 0.24705884, a: 1}
+  m_Color: {r: 0.22352943, g: 0.70980394, b: 0.2901961, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1264,10 +1264,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 7723752106614137911}
-  - {fileID: 4393109520220589932}
   - {fileID: 2808884790482794399}
+  - {fileID: 7723752106614137911}
   - {fileID: 874484803662122151}
+  - {fileID: 4393109520220589932}
   m_Father: {fileID: 1947957210}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1417,11 +1417,11 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 944745399}
-  m_RootOrder: 5
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 50, y: 0}
+  m_AnchoredPosition: {x: -150, y: 0}
   m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1598616624
@@ -1437,7 +1437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.043137256, g: 0.5803922, b: 0.26666668, a: 1}
+  m_Color: {r: 0.54901963, g: 0.77647066, b: 0.24705884, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1493,11 +1493,11 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 944745399}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 150, y: 0}
+  m_AnchoredPosition: {x: 50, y: 0}
   m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1747611140
@@ -1513,7 +1513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.015686275, g: 0.40784317, b: 0.22352943, a: 1}
+  m_Color: {r: 0.043137256, g: 0.5803922, b: 0.26666668, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1912,7 +1912,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1229936214}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1951,7 +1951,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1229936214}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2159,7 +2159,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1229936214}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2311,7 +2311,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1229936214}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
