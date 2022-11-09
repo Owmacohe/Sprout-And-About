@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GardenController : MonoBehaviour
@@ -226,19 +227,28 @@ public class GardenController : MonoBehaviour
 
     public void SetPlantType(string type)
     {
+        tulipsUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+        aloeUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+        snakePlantUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+        birdOfParadiseUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+    
         switch (type)
         {
             case "Tulips":
                 plantType = Garden.PlantTypes.Tulips;
+                tulipsUI.GetComponent<Image>().color = Color.white;
                 break;
             case "Aloe":
                 plantType = Garden.PlantTypes.Aloe;
+                aloeUI.GetComponent<Image>().color = Color.white;
                 break;
             case "SnakePlant":
                 plantType = Garden.PlantTypes.SnakePlant;
+                snakePlantUI.GetComponent<Image>().color = Color.white;
                 break;
             case "BirdOfParadise":
                 plantType = Garden.PlantTypes.BirdOfParadise;
+                birdOfParadiseUI.GetComponent<Image>().color = Color.white;
                 break;
         }
     }
@@ -279,7 +289,7 @@ public class GardenController : MonoBehaviour
 
                 temp.transform.localPosition = new Vector3(i, 0.1f, j);
                 
-                garden.SetPlot(plantType, a, b, temp, temp.GetComponentInChildren<SpriteRenderer>());
+                garden.SetPlot(plantType, a, b, temp);
 
                 b++;
             }
@@ -305,6 +315,6 @@ public class GardenController : MonoBehaviour
             }
         }
         
-        plantType = Garden.PlantTypes.Tulips;
+        SetPlantType("Tulips");
     }
 }

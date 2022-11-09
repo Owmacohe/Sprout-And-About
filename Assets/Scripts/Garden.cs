@@ -22,16 +22,15 @@ public class Garden
         public Vector2 Position { get; }
         public GameObject Object { get; set; }
         public GameObject Plot { get; }
-        public SpriteRenderer UI { get; }
+        public MeshRenderer Renderer { get; set; }
 
-        public Plant(PlantTypes type, Vector2 pos, GameObject obj, GameObject plot, SpriteRenderer ui)
+        public Plant(PlantTypes type, Vector2 pos, GameObject obj, GameObject plot)
         {
             Type = type;
             Growth = 0;
             Position = pos;
             Object = obj;
             Plot = plot;
-            UI = ui;
         }
 
         public void Reset()
@@ -63,10 +62,9 @@ public class Garden
         this.verbose = verbose;
     }
 
-    public void SetPlot(PlantTypes type, int x, int y, GameObject plot, SpriteRenderer ui)
+    public void SetPlot(PlantTypes type, int x, int y, GameObject plot)
     {
-        plants[x, y] = new Plant(type, new Vector2(x, y), null, plot, ui);
-        plants[x, y].UI.enabled = false;
+        plants[x, y] = new Plant(type, new Vector2(x, y), null, plot);
     }
 
     Vector2 GetRandomPos(bool empty)
@@ -193,21 +191,20 @@ public class Garden
         if (plants[x, y].Object == null)
         {
             plants[x, y].Object = obj;
+            plants[x, y].Renderer = obj.GetComponentInChildren<MeshRenderer>();
             plants[x, y].Type = type;
-            
-            plants[x, y].UI.enabled = true;
 
             if (isInit)
             {
                 plants[x, y].Growth = 1;
-                
-                plants[x, y].UI.color = Color.red;
+
+                plants[x, y].Renderer.material.color = Color.red;
             }
             else
             {
                 Mulch -= (int)type;
                 
-                plants[x, y].UI.color = Color.green;
+                plants[x, y].Renderer.material.color = Color.green;
             }
                 
             if (verbose)
@@ -243,11 +240,19 @@ public class Garden
 
             if (plants[x, y].Growth <= 1)
             {
-                plants[x, y].UI.color = Color.Lerp(Color.green, Color.yellow, plants[x, y].Growth);
+                plants[x, y].Renderer.material.color = Color.Lerp(
+                    Color.green, 
+                    Color.yellow,
+                    plants[x, y].Growth
+                );
             }
             else
             {
-                plants[x, y].UI.color = Color.Lerp(Color.yellow, Color.red, -2 * (1 - plants[x, y].Growth));
+                plants[x, y].Renderer.material.color = Color.Lerp(
+                    Color.yellow, 
+                    Color.red, 
+                    -2 * (1 - plants[x, y].Growth)
+                );
             }
 
             /*
@@ -315,8 +320,6 @@ public class Garden
         {
             if ((checkForFullGrowth && temp.Growth >= 1) || !checkForFullGrowth)
             {
-                plants[x, y].UI.enabled = false;
-
                 if (plants[x, y].Growth < 1.5f)
                 {
                     Mulch += (int)type * 2;   
