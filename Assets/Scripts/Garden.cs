@@ -7,14 +7,6 @@ public class Garden
 {
     public enum PlantTypes { None = 0, Tulips = 1, Aloe = 2, SnakePlant = 3, BirdOfParadise = 4 }
 
-    public readonly int[,] StageCounts =
-    {
-        {15, 0, 0, 0},
-        {15, 15, 0, 0},
-        {10, 10, 10, 0},
-        {15, 15, 15, 15}
-    };
-    
     public class Plant
     {
         public PlantTypes Type { get; set; }
@@ -47,10 +39,17 @@ public class Garden
     public int Stage { get; set; }
 
     Plant[,] plants;
-    int planted;
-    bool verbose;
+    bool verbose, debug;
+    
+    readonly int[,] stageCounts =
+    {
+        {18, 0, 0, 0}, // 18
+        {10, 10, 0, 0}, // 20
+        {7, 7, 7, 0}, // ~22
+        {6, 6, 6, 6} // 24
+    };
 
-    public Garden(int x, int y, int startingMulch, bool verbose)
+    public Garden(int x, int y, int startingMulch, bool verbose, bool debug)
     {
         SizeX = x;
         SizeY = y;
@@ -60,6 +59,7 @@ public class Garden
         plants = new Plant[x, y];
         
         this.verbose = verbose;
+        this.debug = debug;
     }
 
     public void SetPlot(PlantTypes type, int x, int y, GameObject plot)
@@ -136,7 +136,7 @@ public class Garden
 
     float GetIndividualScore(int count, int index)
     {
-        float temp = count / ((Stage > (index - 1)) ? (float)StageCounts[Stage, index] : count);
+        float temp = count / ((Stage > (index - 1)) ? (float)stageCounts[Stage, index] : count);
 
         return temp > 1 ? 1 : temp;
     }
@@ -183,7 +183,8 @@ public class Garden
 
         return (Stage == 0 && temp[0] >= 1) ||
                (Stage == 1 && temp[0] >= 1 && temp[1] >= 1) ||
-               (Stage == 2 && temp[0] >= 1 && temp[1] >= 1 && temp[2] >= 1);
+               (Stage == 2 && temp[0] >= 1 && temp[1] >= 1 && temp[2] >= 1) ||
+               (Stage == 3 && temp[0] >= 1 && temp[1] >= 1 && temp[2] >= 1 && temp[3] >= 1);
     }
 
     public Vector2 CreatePlant(PlantTypes type, GameObject obj, int x, int y, bool isInit = true)
@@ -202,8 +203,11 @@ public class Garden
             }
             else
             {
-                Mulch -= (int)type;
-                
+                if (!debug)
+                {
+                    Mulch -= (int)type;
+                }
+
                 plants[x, y].Renderer.material.color = Color.green;
             }
                 
@@ -211,8 +215,6 @@ public class Garden
             {
                 Debug.Log("<b>GARDEN:</b> [" + x + ", " + y + "] planted");
             }
-
-            planted++;
 
             return new Vector2(x, y);
         }
@@ -320,18 +322,16 @@ public class Garden
         {
             if ((checkForFullGrowth && temp.Growth >= 1) || !checkForFullGrowth)
             {
-                if (plants[x, y].Growth < 1.5f)
+                if (plants[x, y].Growth < 1.5f && !debug)
                 {
-                    Mulch += (int)type * 2;   
+                    Mulch += (int)type + 1;   
                 }
 
                 if (verbose)
                 {
                     Debug.Log("<b>GARDEN:</b> [" + x + ", " + y + "] destroyed"); 
                 }
-                
-                planted--;
-                
+
                 return plants[x, y].Object;
             }
             

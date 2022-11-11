@@ -8,8 +8,8 @@ using Random = UnityEngine.Random;
 
 public class GardenController : MonoBehaviour
 {
-    public bool paused;
-    
+    public bool paused, debug;
+
     [SerializeField]
     bool verbose;
     [SerializeField]
@@ -40,14 +40,14 @@ public class GardenController : MonoBehaviour
 
     void Start()
     {
-        garden = new Garden(6, 6, 10, verbose);
+        garden = new Garden(6, 6, 10, verbose, debug);
 
         Reset(false);
     }
 
     void FixedUpdate()
     {
-        if (!paused)
+        if (!paused && !debug)
         {
             List<GameObject>[] temp = garden.GrowAllPlants(growthSpeed);
 
@@ -167,6 +167,11 @@ public class GardenController : MonoBehaviour
                 garden.GetPlantFromPos((int) pos.x, (int) pos.y).Reset();
             
                 StartCoroutine(UpdateUI());
+
+                if (garden.Mulch <= 0)
+                {
+                    // TODO: lose state
+                }
             }
         }
         
@@ -271,6 +276,9 @@ public class GardenController : MonoBehaviour
                 birdOfParadiseUI.SetActive(true);
                 birdOfParadiseMarker.SetActive(true);
                 break;
+            case 4:
+                // TODO: win state
+                break;
         }
     }
 
@@ -298,14 +306,17 @@ public class GardenController : MonoBehaviour
         }
         
         StartCoroutine(UpdateUI());
+
+        if (!debug)
+        {
+            aloeUI.SetActive(false);
+            snakePlantUI.SetActive(false);
+            birdOfParadiseUI.SetActive(false);
         
-        aloeUI.SetActive(false);
-        snakePlantUI.SetActive(false);
-        birdOfParadiseUI.SetActive(false);
-        
-        aloeMarker.SetActive(false);
-        snakePlantMarker.SetActive(false);
-        birdOfParadiseMarker.SetActive(false);
+            aloeMarker.SetActive(false);
+            snakePlantMarker.SetActive(false);
+            birdOfParadiseMarker.SetActive(false);   
+        }
 
         if (startFull)
         {
