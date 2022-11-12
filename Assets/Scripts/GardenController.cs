@@ -9,6 +9,8 @@ using Random = UnityEngine.Random;
 public class GardenController : MonoBehaviour
 {
     public bool paused, debug;
+    [HideInInspector]
+    public bool canCreate, canDestroy;
 
     [SerializeField]
     bool verbose;
@@ -35,14 +37,16 @@ public class GardenController : MonoBehaviour
     
     public Garden garden;
     int lastMulch;
+    TutorialController tc;
     
     Garden.PlantTypes plantType = Garden.PlantTypes.None;
 
     void Start()
     {
         garden = new Garden(6, 6, 10, verbose, debug);
+        tc = FindObjectOfType<TutorialController>();
 
-        Reset(false);
+        Invoke(nameof(Reset), 0.1f);
     }
 
     void FixedUpdate()
@@ -73,8 +77,20 @@ public class GardenController : MonoBehaviour
 
                 dying.GetComponentInChildren<MeshFilter>().mesh = newState;
             }
+
+            if (temp[1].Count > 0 && tc.Check(false, 2))
+            {
+                tc.Pause(
+                    Camera.main.WorldToScreenPoint(temp[1][Random.Range(0, temp[1].Count)].transform.position),
+                    Vector2.up * 100,
+                    180,
+                    true,
+                    false,
+                    true
+                );
+            }
         
-            foreach (GameObject dead in temp[1])
+            foreach (GameObject dead in temp[2])
             {
                 Mesh newState = null;
             
@@ -95,11 +111,12 @@ public class GardenController : MonoBehaviour
                 }
 
                 dead.GetComponentInChildren<MeshFilter>().mesh = newState;
+                dead.GetComponentInChildren<Canvas>().enabled = true;
             }   
         }
     }
 
-    void CreatePlant(int x, int y, bool isInit, bool isRandom)
+    void CreatePlant(int x, int y, bool isInit)
     {
         if (garden.Mulch >= (int)plantType)
         {
@@ -125,14 +142,7 @@ public class GardenController : MonoBehaviour
 
             Vector2 temp;
 
-            if (isRandom)
-            {
-                temp = garden.CreatePlant(plantType, tempPlant, isInit);
-            }
-            else
-            {
-                temp = garden.CreatePlant(plantType, tempPlant, x, y, isInit);
-            }
+            temp = garden.CreatePlant(plantType, tempPlant, x, y, isInit);
 
             tempPlant.transform.localPosition = new Vector3(start.x + temp.x, 0.2f, start.y - temp.y);   
             tempPlant.transform.localRotation = Quaternion.Euler(Vector3.up * Random.Range(0, 360));
@@ -146,38 +156,58 @@ public class GardenController : MonoBehaviour
 
     public void ActivatePlot(Vector2 pos)
     {
-        if (garden.GetPlantFromPos((int)pos.x, (int)pos.y).Object == null)
+        // Tutorial step 1: place plant in plot
+        if (tc.Check(true, 1))
         {
-            CreatePlant((int)pos.x, (int)pos.y, false, false);
-            
-            StartCoroutine(UpdateUI());
+            tc.Continue();
         }
-        else
-        {
-            GameObject temp = garden.DestroyPlant(
-                garden.GetPlantFromPos((int)pos.x, (int)pos.y).Type,
-                (int)pos.x,
-                (int)pos.y,
-                true
-            );
 
-            if (temp != null)
+        bool createValid = !paused || (paused && canCreate);
+        bool destroyValid = !paused || (paused && canDestroy);
+
+        if (createValid || destroyValid)
+        {
+            GameObject targetPlant = garden.GetPlantFromPos((int) pos.x, (int) pos.y).Object;
+            
+            if (createValid && targetPlant == null)
             {
-                Destroy(temp);
-                garden.GetPlantFromPos((int) pos.x, (int) pos.y).Reset();
+                CreatePlant((int)pos.x, (int)pos.y, false);
             
                 StartCoroutine(UpdateUI());
-
-                if (garden.Mulch <= 0)
+            }
+            else if (destroyValid && targetPlant != null)
+            {
+                // Tutorial step 2: destroy plant
+                if (tc.Check(true, 2))
                 {
-                    // TODO: lose state
+                    tc.Continue();
+                }
+                
+                GameObject temp = garden.DestroyPlant(
+                    garden.GetPlantFromPos((int)pos.x, (int)pos.y).Type,
+                    (int)pos.x,
+                    (int)pos.y,
+                    true
+                );
+
+                if (temp != null)
+                {
+                    Destroy(temp);
+                    garden.GetPlantFromPos((int) pos.x, (int) pos.y).Reset();
+            
+                    StartCoroutine(UpdateUI());
+
+                    if (garden.Mulch <= 0)
+                    {
+                        // TODO: lose state
+                    }
                 }
             }
-        }
         
-        if (garden.CanProgress())
-        {
-            IncreaseStage();
+            if (garden.CanProgress())
+            {
+                IncreaseStage();
+            }   
         }
     }
 
@@ -208,23 +238,23 @@ public class GardenController : MonoBehaviour
 
         float[] temp = garden.GetScores();
 
-        tulipsBar.sizeDelta = new Vector2(temp[0] * 100f, 20f);
-        tulipsBar.anchoredPosition = new Vector2((0.5f * temp[0] * 100f) - 200, 0);
+        tulipsBar.sizeDelta = new Vector2(temp[0] * 100f, 30);
+        tulipsBar.anchoredPosition = new Vector2((0.5f * temp[0] * 100f) - 50, 120);
 
         if (garden.Stage > 0)
         {
-            aloeBar.sizeDelta = new Vector2(temp[1] * 100f, 20f);
-            aloeBar.anchoredPosition = new Vector2((0.5f * temp[1] * 100f) - 100, 0);
+            aloeBar.sizeDelta = new Vector2(temp[1] * 100f, 30);
+            aloeBar.anchoredPosition = new Vector2((0.5f * temp[1] * 100f) - 50, 80);
             
             if (garden.Stage > 1)
             {
-                snakePlantBar.sizeDelta = new Vector2(temp[2] * 100f, 20f);
-                snakePlantBar.anchoredPosition = new Vector2((0.5f * temp[2] * 100f), 0);
+                snakePlantBar.sizeDelta = new Vector2(temp[2] * 100f, 30);
+                snakePlantBar.anchoredPosition = new Vector2((0.5f * temp[2] * 100f) - 50, 40);
                 
                 if (garden.Stage > 2)
                 {
-                    birdOfParadiseBar.sizeDelta = new Vector2(temp[3] * 100f, 20f);
-                    birdOfParadiseBar.anchoredPosition = new Vector2((0.5f * temp[3] * 100f) + 100, 0);
+                    birdOfParadiseBar.sizeDelta = new Vector2(temp[3] * 100f, 30);
+                    birdOfParadiseBar.anchoredPosition = new Vector2((0.5f * temp[3] * 100f) - 50, 0);
                 }
             }
         }
@@ -240,18 +270,49 @@ public class GardenController : MonoBehaviour
         switch (type)
         {
             case "Tulips":
+                // Tutorial step 0: click tulip in menu
+                if (tc.Check(true, 0))
+                {
+                    tc.Continue();
+                    tc.Pause(
+                        Camera.main.WorldToScreenPoint(garden.GetRandomPlant().Plot.transform.position), 
+                        Vector2.up * 100,
+                        180,
+                        true,
+                        true
+                    );
+                }
+                
                 plantType = Garden.PlantTypes.Tulips;
                 tulipsUI.GetComponent<Image>().color = Color.white;
                 break;
             case "Aloe":
+                // Tutorial step 3: click aloe in menu
+                if (tc.Check(true, 3))
+                {
+                    tc.Continue();
+                }
+
                 plantType = Garden.PlantTypes.Aloe;
                 aloeUI.GetComponent<Image>().color = Color.white;
                 break;
             case "SnakePlant":
+                // Tutorial step 4: click snake plant in menu
+                if (tc.Check(true, 4))
+                {
+                    tc.Continue();
+                }
+                
                 plantType = Garden.PlantTypes.SnakePlant;
                 snakePlantUI.GetComponent<Image>().color = Color.white;
                 break;
             case "BirdOfParadise":
+                // Tutorial step 5: click bird of paradise in menu
+                if (tc.Check(true, 5))
+                {
+                    tc.Continue();
+                }
+                
                 plantType = Garden.PlantTypes.BirdOfParadise;
                 birdOfParadiseUI.GetComponent<Image>().color = Color.white;
                 break;
@@ -265,24 +326,32 @@ public class GardenController : MonoBehaviour
         switch (garden.Stage)
         {
             case 1:
+                tc.Pause(aloeUI.transform.position, Vector2.up * 100, 180, true);
+                
                 aloeUI.SetActive(true);
                 aloeMarker.SetActive(true);
                 break;
             case 2:
+                tc.Pause(snakePlantUI.transform.position, Vector2.up * 100, 180, true);
+                
                 snakePlantUI.SetActive(true);
                 snakePlantMarker.SetActive(true);
                 break;
             case 3:
+                tc.Pause(birdOfParadiseUI.transform.position, Vector2.up * 100, 180, true);
+                
                 birdOfParadiseUI.SetActive(true);
                 birdOfParadiseMarker.SetActive(true);
                 break;
             case 4:
+                paused = true;
+                
                 // TODO: win state
                 break;
         }
     }
 
-    void Reset(bool startFull)
+    void Reset()
     {
         int a = 0;
         int b = 0;
@@ -317,15 +386,9 @@ public class GardenController : MonoBehaviour
             snakePlantMarker.SetActive(false);
             birdOfParadiseMarker.SetActive(false);   
         }
-
-        if (startFull)
-        {
-            for (int k = 0; k < garden.SizeX * garden.SizeY; k++)
-            {
-                CreatePlant(0, 0, true, true);
-            }
-        }
         
         SetPlantType("Tulips");
+        
+        tc.Pause(tulipsUI.transform.position, Vector2.up * 100, 180, true);
     }
 }

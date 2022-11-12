@@ -49,14 +49,17 @@ public class RustleOnHover : MonoBehaviour
 
     void OnMouseEnter()
     {
-        if (garden.GetPlantFromPlot(gameObject).Growth < 1.5f)
+        if (enabled)
         {
-            isRustling = true;
-            rustleStartTime = Time.time;
+            if (garden.GetPlantFromPlot(gameObject).Growth < 1.5f)
+            {
+                isRustling = true;
+                rustleStartTime = Time.time;
 
-            GameObject temp = garden.GetPlantFromPlot(gameObject).Object;
+                GameObject temp = garden.GetPlantFromPlot(gameObject).Object;
         
-            rustle = (temp != null) ? temp.transform : null;   
+                rustle = (temp != null) ? temp.transform : null;   
+            }   
         }
     }
 }

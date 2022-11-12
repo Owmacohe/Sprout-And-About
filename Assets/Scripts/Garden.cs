@@ -67,17 +67,11 @@ public class Garden
         plants[x, y] = new Plant(type, new Vector2(x, y), null, plot);
     }
 
-    Vector2 GetRandomPos(bool empty)
+    public Plant GetRandomPlant()
     {
         Vector2 temp = new Vector2(Random.Range(0, SizeX), Random.Range(0, SizeY));
         
-        while ((empty && plants[(int)temp.x, (int)temp.y].Object != null) ||
-               (!empty && plants[(int)temp.x, (int)temp.y].Object == null))
-        {
-            temp = new Vector2(Random.Range(0, SizeX), Random.Range(0, SizeY));
-        }
-
-        return temp;
+        return GetPlantFromPos((int)temp.x, (int)temp.y);
     }
 
     public Plant GetPlantFromPlot(GameObject plot)
@@ -227,13 +221,6 @@ public class Garden
         return Vector2.one * -1;
     }
 
-    public Vector2 CreatePlant(PlantTypes type, GameObject obj, bool isInit = true)
-    {
-        Vector2 temp = GetRandomPos(true);
-
-        return CreatePlant(type, obj, (int)temp.x, (int)temp.y, isInit);
-    }
-
     public Vector2 GrowPlant(int x, int y, float growthSpeed)
     {
         if (plants[x, y].Object != null)
@@ -280,29 +267,27 @@ public class Garden
         return Vector2.one * -1;
     }
 
-    public Vector2 GrowPlant(float growthSpeed)
-    {
-        Vector2 temp = GetRandomPos(false);
-        
-        return GrowPlant((int)temp.x, (int)temp.y, growthSpeed);
-    }
-
     public List<GameObject>[] GrowAllPlants(float growthSpeed)
     {
         List<GameObject> dying = new List<GameObject>();
+        List<GameObject> grown = new List<GameObject>();
         List<GameObject> dead = new List<GameObject>();
         
-        List<GameObject>[] temp = { dying, dead };
+        List<GameObject>[] temp = { dying, grown, dead };
         
         foreach (Plant i in plants)
         {
-            if (i.Object != null)
+            if (i != null && i.Object != null)
             {
                 GrowPlant((int)i.Position.x, (int)i.Position.y, growthSpeed);
 
                 if (i.Growth >= 0.5 && i.Growth < 1)
                 {
                     dying.Add(i.Object);
+                }
+                else if (i.Growth >= 1 && i.Growth < 1.5f)
+                {
+                    grown.Add(i.Object);
                 }
                 else if (i.Growth >= 1.5f)
                 {
@@ -349,12 +334,5 @@ public class Garden
         }
         
         return null;
-    }
-    
-    public GameObject DestroyPlant(PlantTypes type, bool checkForFullGrowth)
-    {
-        Vector2 temp = GetRandomPos(false);
-        
-        return DestroyPlant(type, (int)temp.x, (int)temp.y, checkForFullGrowth);
     }
 }
