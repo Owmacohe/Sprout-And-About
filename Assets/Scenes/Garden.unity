@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 7c0aaadbaa3ae1a46a8ae3c07931a456, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -2136,7 +2136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 346916e41cfd449cbad7776bbf6265be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 0.1
 --- !u!108 &1932777535
 Light:
   m_ObjectHideFlags: 0
@@ -2389,8 +2389,8 @@ MonoBehaviour:
   m_ChildAlignment: 3
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 40, y: 50}
-  m_Spacing: {x: -25, y: -40}
+  m_CellSize: {x: 50, y: 50}
+  m_Spacing: {x: -35, y: -40}
   m_Constraint: 0
   m_ConstraintCount: 5
 --- !u!1 &2026685214

@@ -144,7 +144,7 @@ public class GardenController : MonoBehaviour
 
             temp = garden.CreatePlant(plantType, tempPlant, x, y, isInit);
 
-            tempPlant.transform.localPosition = new Vector3(start.x + temp.x, 0.2f, start.y - temp.y);   
+            tempPlant.transform.localPosition = new Vector3(start.x + temp.x, 0.3f, start.y - temp.y);   
             tempPlant.transform.localRotation = Quaternion.Euler(Vector3.up * Random.Range(0, 360));
             tempPlant.transform.localScale = Vector3.one * 1.2f;   
         }
