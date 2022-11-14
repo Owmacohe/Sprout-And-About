@@ -37,10 +37,11 @@ public class Garden
     public int SizeY { get; }
     public int Mulch { get; private set; }
     public int Stage { get; set; }
+    public int Planted { get; set; }
 
     Plant[,] plants;
     bool verbose, debug;
-    
+
     readonly int[,] stageCounts =
     {
         {18, 0, 0, 0}, // 18
@@ -204,6 +205,8 @@ public class Garden
 
                 plants[x, y].Renderer.material.color = Color.green;
             }
+
+            Planted++;
                 
             if (verbose)
             {
@@ -311,6 +314,8 @@ public class Garden
                 {
                     Mulch += (int)type + 1;   
                 }
+                
+                Planted--;
 
                 if (verbose)
                 {

@@ -34,6 +34,11 @@ public class GardenController : MonoBehaviour
     RectTransform tulipsBar, aloeBar, snakePlantBar, birdOfParadiseBar;
     [SerializeField]
     GameObject tulipsMarker, aloeMarker, snakePlantMarker, birdOfParadiseMarker;
+
+    [SerializeField]
+    GameObject loseFadeout, winFadeout;
+
+    bool loseFadingOut, winFadingOut;
     
     public Garden garden;
     int lastMulch;
@@ -112,7 +117,34 @@ public class GardenController : MonoBehaviour
 
                 dead.GetComponentInChildren<MeshFilter>().mesh = newState;
                 dead.GetComponentInChildren<Canvas>().enabled = true;
-            }   
+            }
+            
+            if (garden.Mulch <= 0 && garden.Planted == temp[2].Count)
+            {
+                loseFadingOut = true;
+            }
+        }
+
+        if (loseFadingOut || winFadingOut)
+        {
+            GameObject fadeout = loseFadingOut ? loseFadeout : winFadeout;
+
+            if (!fadeout.activeSelf)
+            {
+                paused = true;
+                fadeout.SetActive(true);
+            }
+            
+            foreach (Image i in fadeout.GetComponentsInChildren<Image>())
+            {
+                Color temp = i.color;
+                float opacity = temp.a;
+
+                if (opacity < 0.9f)
+                {
+                    i.color = new Color(temp.r, temp.g, temp.b, opacity + 0.01f);
+                }   
+            }
         }
     }
 
@@ -196,11 +228,6 @@ public class GardenController : MonoBehaviour
                     garden.GetPlantFromPos((int) pos.x, (int) pos.y).Reset();
             
                     StartCoroutine(UpdateUI());
-
-                    if (garden.Mulch <= 0)
-                    {
-                        // TODO: lose state
-                    }
                 }
             }
         
@@ -344,9 +371,7 @@ public class GardenController : MonoBehaviour
                 birdOfParadiseMarker.SetActive(true);
                 break;
             case 4:
-                paused = true;
-                
-                // TODO: win state
+                winFadingOut = true;
                 break;
         }
     }
