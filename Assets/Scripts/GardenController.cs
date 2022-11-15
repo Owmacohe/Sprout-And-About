@@ -289,10 +289,10 @@ public class GardenController : MonoBehaviour
 
     public void SetPlantType(string type)
     {
-        tulipsUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
-        aloeUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
-        snakePlantUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
-        birdOfParadiseUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+        tulipsUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+        aloeUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+        snakePlantUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+        birdOfParadiseUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
     
         switch (type)
         {
