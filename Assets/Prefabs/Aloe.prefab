@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1470255733939742437}
   - component: {fileID: 1479125851168278861}
+  - component: {fileID: 1857649960463569832}
   m_Layer: 0
   m_Name: Aloe
   m_TagString: Untagged
@@ -48,6 +49,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   amplitude: 5
+--- !u!114 &1857649960463569832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470255733939742436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dfe19e07bbb76846be1e94dac8eba1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxSelector:
+  - {fileID: 8300000, guid: 2cb785a0599783e43b2a3fa005d79e7d, type: 3}
+  playOnStart: 0
+  loop: 0
+  volume: 1
 --- !u!1 &5452259959334489733
 GameObject:
   m_ObjectHideFlags: 0

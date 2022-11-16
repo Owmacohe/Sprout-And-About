@@ -43,6 +43,10 @@ public class GardenController : MonoBehaviour
     public Garden garden;
     int lastMulch;
     TutorialController tc;
+    SoundManager sm;
+
+    List<GameObject> dyingChecker;
+    List<GameObject> deadChecker;
     
     Garden.PlantTypes plantType = Garden.PlantTypes.None;
 
@@ -50,6 +54,10 @@ public class GardenController : MonoBehaviour
     {
         garden = new Garden(6, 6, 10, verbose, debug);
         tc = FindObjectOfType<TutorialController>();
+        sm = FindObjectOfType<SoundManager>();
+
+        dyingChecker = new List<GameObject>();
+        deadChecker = new List<GameObject>();
 
         Invoke(nameof(Reset), 0.1f);
     }
@@ -62,25 +70,30 @@ public class GardenController : MonoBehaviour
 
             foreach (GameObject dying in temp[0])
             {
-                Mesh newState = null;
-            
-                switch (garden.GetPlantFromObject(dying).Type)
+                if (!dyingChecker.Contains(dying))
                 {
-                    case Garden.PlantTypes.Tulips:
-                        newState = tulipsStates[1];
-                        break;
-                    case Garden.PlantTypes.Aloe:
-                        newState = aloeStates[1];
-                        break;
-                    case Garden.PlantTypes.SnakePlant:
-                        newState = snakePlantStates[1];
-                        break;
-                    case Garden.PlantTypes.BirdOfParadise:
-                        newState = birdOfParadiseStates[1];
-                        break;
-                }
+                    Mesh newState = null;
+            
+                    switch (garden.GetPlantFromObject(dying).Type)
+                    {
+                        case Garden.PlantTypes.Tulips:
+                            newState = tulipsStates[1];
+                            break;
+                        case Garden.PlantTypes.Aloe:
+                            newState = aloeStates[1];
+                            break;
+                        case Garden.PlantTypes.SnakePlant:
+                            newState = snakePlantStates[1];
+                            break;
+                        case Garden.PlantTypes.BirdOfParadise:
+                            newState = birdOfParadiseStates[1];
+                            break;
+                    }
 
-                dying.GetComponentInChildren<MeshFilter>().mesh = newState;
+                    dying.GetComponentInChildren<MeshFilter>().mesh = newState;
+                
+                    dyingChecker.Add(dying);   
+                }
             }
 
             if (temp[1].Count > 0 && tc.Check(false, 2))
@@ -97,26 +110,33 @@ public class GardenController : MonoBehaviour
         
             foreach (GameObject dead in temp[2])
             {
-                Mesh newState = null;
-            
-                switch (garden.GetPlantFromObject(dead).Type)
+                if (!deadChecker.Contains(dead))
                 {
-                    case Garden.PlantTypes.Tulips:
-                        newState = tulipsStates[2];
-                        break;
-                    case Garden.PlantTypes.Aloe:
-                        newState = aloeStates[2];
-                        break;
-                    case Garden.PlantTypes.SnakePlant:
-                        newState = snakePlantStates[2];
-                        break;
-                    case Garden.PlantTypes.BirdOfParadise:
-                        newState = birdOfParadiseStates[2];
-                        break;
-                }
+                    Mesh newState = null;
+            
+                    switch (garden.GetPlantFromObject(dead).Type)
+                    {
+                        case Garden.PlantTypes.Tulips:
+                            newState = tulipsStates[2];
+                            break;
+                        case Garden.PlantTypes.Aloe:
+                            newState = aloeStates[2];
+                            break;
+                        case Garden.PlantTypes.SnakePlant:
+                            newState = snakePlantStates[2];
+                            break;
+                        case Garden.PlantTypes.BirdOfParadise:
+                            newState = birdOfParadiseStates[2];
+                            break;
+                    }
 
-                dead.GetComponentInChildren<MeshFilter>().mesh = newState;
-                dead.GetComponentInChildren<Canvas>().enabled = true;
+                    dead.GetComponentInChildren<MeshFilter>().mesh = newState;
+                    dead.GetComponentInChildren<Canvas>().enabled = true;
+                
+                    dead.GetComponent<RandomSoundPlayer>().RandomSoundPlayed();
+                    
+                    deadChecker.Add(dead);
+                }
             }
             
             if (garden.Mulch <= 0 && garden.Planted == temp[2].Count)
@@ -133,6 +153,15 @@ public class GardenController : MonoBehaviour
             {
                 paused = true;
                 fadeout.SetActive(true);
+                
+                if (loseFadingOut)
+                {
+                    sm.Lose();   
+                }
+                else if (winFadingOut)
+                {
+                    sm.Win();
+                }
             }
             
             foreach (Image i in fadeout.GetComponentsInChildren<Image>())
@@ -143,12 +172,12 @@ public class GardenController : MonoBehaviour
                 if (opacity < 0.9f)
                 {
                     i.color = new Color(temp.r, temp.g, temp.b, opacity + 0.01f);
-                }   
+                }
             }
         }
     }
 
-    void CreatePlant(int x, int y, bool isInit)
+    bool CreatePlant(int x, int y, bool isInit)
     {
         if (garden.Mulch >= (int)plantType)
         {
@@ -178,12 +207,13 @@ public class GardenController : MonoBehaviour
 
             tempPlant.transform.localPosition = new Vector3(start.x + temp.x, 0.3f, start.y - temp.y);   
             tempPlant.transform.localRotation = Quaternion.Euler(Vector3.up * Random.Range(0, 360));
-            tempPlant.transform.localScale = Vector3.one * 1.2f;   
+            tempPlant.transform.localScale = Vector3.one * 1.2f;
+
+            return true;
         }
-        else
-        {
-            Debug.Log("<b>GARDEN CONTROLLER:</b> [" + x + ", " + y + "] not enough mulch");
-        }
+        
+        Debug.Log("<b>GARDEN CONTROLLER:</b> [" + x + ", " + y + "] not enough mulch");
+        return false;
     }
 
     public void ActivatePlot(Vector2 pos)
@@ -203,9 +233,14 @@ public class GardenController : MonoBehaviour
             
             if (createValid && targetPlant == null)
             {
-                CreatePlant((int)pos.x, (int)pos.y, false);
-            
-                StartCoroutine(UpdateUI());
+                bool temp = CreatePlant((int)pos.x, (int)pos.y, false);
+
+                if (temp)
+                {
+                    StartCoroutine(UpdateUI());
+                
+                    sm.Create();   
+                }
             }
             else if (destroyValid && targetPlant != null)
             {
@@ -228,6 +263,8 @@ public class GardenController : MonoBehaviour
                     garden.GetPlantFromPos((int) pos.x, (int) pos.y).Reset();
             
                     StartCoroutine(UpdateUI());
+                    
+                    sm.Destroy();
                 }
             }
         
@@ -414,6 +451,11 @@ public class GardenController : MonoBehaviour
         
         SetPlantType("Tulips");
         
+        Invoke(nameof(ResetTutorial), 0.5f);
+    }
+
+    void ResetTutorial()
+    {
         tc.Pause(tulipsUI.transform.position, Vector2.up * 100, 180, true);
     }
 }

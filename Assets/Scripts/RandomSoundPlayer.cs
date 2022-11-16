@@ -7,23 +7,38 @@ using UnityEngine.Audio;
 //Found through Youtube: https://www.youtube.com/watch?v=OCRzBX3ON_c
 public class RandomSoundPlayer : MonoBehaviour
 {
-    [SerializeField] AudioSource theSources;
     [SerializeField] AudioClip[] sfxSelector;
+    [SerializeField] bool playOnStart;
+    [SerializeField] bool loop;
+    [SerializeField] float volume;
+    
+    AudioSource theSources;
 
-
-    public void Start()
+    void Start()
     {
-        theSources = GetComponent<AudioSource>();
+        theSources = gameObject.AddComponent<AudioSource>();
+        theSources.loop = loop;
+        theSources.volume = volume;
+        
+        if (playOnStart)
+        {
+            RandomSoundPlayed();
+        }
     }
 
+    /*
+    // we probably don't need to play a new sound every frame
     public void Update()
     {
         RandomSoundPlayed();
     }
+    */
+
     public void RandomSoundPlayed()
     {
         AudioClip randomSound = sfxSelector[UnityEngine.Random.Range(0, sfxSelector.Length)];
-        theSources.PlayOneShot(randomSound);
+        theSources.clip = randomSound;
+        theSources.Play();
     }
 
 }
